@@ -1,0 +1,1 @@
+web: gunicorn simdroid.wsgi --log-file -
