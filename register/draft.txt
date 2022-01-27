@@ -1,0 +1,248 @@
+Is all your information displayed correctly?:
+---------------------
+🟢 Name: qwertyu
+🟠 Last Name: sdfghj
+📱 Phone number: 2345678
+🏠 Address: asdfghj
+🇺🇸 Bot Language: 🇬🇧 English
+
+99 107 36 03 Dadajon
+
+99 785 53 86 Onajon
+
+simkarta - client, 
+
+# @bot.message_handler(func=lambda message: True, content_types=['photo', 'text'] )
+# def register_view(message):
+#     user_obj = UserOrder.objects.get(owner__user_id=message.from_user.id)
+#     # sim = SimUser.objects.all()
+#     # user_obj_id = message.from_user.id
+#     print('user obj: ', user_obj)
+#     # print(sim)
+#     bot.send_message(message.from_user.id, 'Iltimos kerakli buyruqni tanlang!')
+
+# use callback to delete the objects
+
+# @bot.message_handler(func=lambda message: True, content_types=['photo', 'text'] )
+# def register_view(message):
+#     register_user(message) # not working use this function only in message handler
+    
+    
+#     user_commands = ['Tasdiqlash✅', 'Orqaga ↩️', 'Orqaga', 'O\'chirish', 'Bekor qilish 🚫', 'Ma\'lumot olish📕', 'Simkarta buyurtma berish','Order simcard', 'Info📕', 'Cancel 🚫', 'Back ↩️', 'Confirm✅', 'Simkartani o\'chirish']
+#     user_obj = BotUser.objects.get(user_id=message.from_user.id) #use filter and id
+    
+    
+#     if user_obj.step == 0:   
+#         if message.text not in user_commands:
+#             bot.send_message(message.from_user.id, 'Iltimos kerakli buyruqni tanlang!')
+#     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+#     btn1 = types.KeyboardButton('Simkarta buyurtma berish')
+#     btn2 = types.KeyboardButton('Simkartani o\'chirish')
+#     btn3 = types.KeyboardButton('Linephone ')
+#     btn4 = types.KeyboardButton('Ma\'lumot olish📕')
+#     markup.add(btn1, btn2, btn3, btn4)
+
+#     if message.text == 'Simkarta buyurtma berish':  
+#         bot.send_message(message.from_user.id, 'Iltimos, ro\'yxatdan o\'tish uchun ma\'lumotlarni kiriting')   
+#         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+#         btn2 = types.KeyboardButton('Bekor qilish 🚫')
+#         markup.add(btn2)
+#         user_obj.step = 1
+#         user_obj.save()
+#         bot.send_message(
+#             message.from_user.id, 'Ismingiz va familiyangizni kiriting:', reply_markup=markup)
+#     elif message.text == 'Order simcard':     
+#         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+#         cancel = types.KeyboardButton('Cancel 🚫')
+#         markup.add(cancel)
+#         user_obj.step = 1
+#         user_obj.save()
+#         bot.send_message(
+#             message.from_user.id, 'Please enter your full name', reply_markup=markup)
+#     elif message.text == 'Ma\'lumot olish📕':
+#         bot_users = BotUser.objects.all()
+#         bot.send_message(message.from_user.id,
+#                          "Bot haqida ma\'lumot:")
+#         for u in bot_users:
+#             bot.send_message(message.from_user.id,
+#                              f"Ism Familiyasi👤 - {u.full_name}")
+
+#     elif message.text == 'Info📕':
+#         bot_users = BotUser.objects.all()
+#         bot.send_message(message.from_user.id,
+#                          "Some text")
+#         for u in bot_users:
+#             bot.send_message(message.from_user.id,
+#                              f"Ism Familiyasi👤 - {u.full_name}")
+    
+#     elif message.text == 'Bekor qilish 🚫':
+#         user_obj.delete()
+#         # markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+#         # btn1 = types.KeyboardButton('Simkarta buyurtma berish')
+#         # btn2 = types.KeyboardButton('Simkartani o\'chirish')
+#         # btn3 = types.KeyboardButton('Linephone ')
+#         # btn4 = types.KeyboardButton('Ma\'lumot olish📕')
+#         # markup.add(btn1, btn2, btn3, btn4)
+#         bot.send_message(message.from_user.id,
+#                          "Bekor qilindi\n", reply_markup=markup)
+    
+#     elif message.text == 'Cancel 🚫':
+#         user_obj.delete()
+#         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+#         btn1 = types.KeyboardButton('Order simcard')
+#         btn2 = types.KeyboardButton('Delete simcard')
+#         btn3 = types.KeyboardButton('Linephone ')
+#         btn4 = types.KeyboardButton('Info📕')
+#         markup.add(btn1, btn2, btn3, btn4)
+#         bot.send_message(message.from_user.id,
+#                          "Cancelled\n", reply_markup=markup)
+    
+#     elif message.text == 'Orqaga ↩️':
+#         user_obj.step -= 1
+#         user_obj.save()
+#         cancel_func(message)
+    
+#     elif message.text == 'Back ↩️':
+#         user_obj.step -= 1
+#         user_obj.save()
+#         cancel_func(message)
+
+#     elif message.text == 'Tasdiqlash✅':
+#         # markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+#         # btn1 = types.KeyboardButton('Simkarta buyurtma berish')
+#         # btn2 = types.KeyboardButton('Simkartani o\'chirish')
+#         # btn3 = types.KeyboardButton('Linephone ')
+#         # btn4 = types.KeyboardButton('Ma\'lumot olish📕')
+#         # markup.add(btn1, btn2, btn3, btn4)
+#         user_obj.step = 0
+#         user_obj.save()
+#         bot.send_message(message.from_user.id,
+#                          "Buyurtmangiz qabul qilindi!", reply_markup=markup)
+
+#     elif message.text == 'Confirm✅':
+#         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+#         btn1 = types.KeyboardButton('Order simcard')
+#         btn2 = types.KeyboardButton('Delete simcard')
+#         btn3 = types.KeyboardButton('Linephone ')
+#         btn4 = types.KeyboardButton('Info📕')
+#         markup.add(btn1, btn2, btn3, btn4)
+#         user_obj.step = 0
+#         user_obj.save()
+#         bot.send_message(message.from_user.id,
+#                          "Your order has been accepted!", reply_markup=markup)
+#     elif message.text == 'Simkartani o\'chirish':
+#         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+#         delete = types.KeyboardButton('O\'chirish')
+#         back = types.KeyboardButton('Orqaga')
+#         markup.add(delete, back)
+#         if user_obj.address == 'unavailable':
+#             bot.send_message(message.from_user.id,
+#                          "Sizda buyurtma berilgan simkarta mavjud emas!")
+#         else:
+#             bot.send_message(message.from_user.id,
+#                          f"Buyurtma berilgan simkartalar:\nF I SH: {user_obj.full_name}\nTelefon raqam: {user_obj.tel_number}\nTanlangan sim karta turi:{user_obj.sim_type}\nTanlangan sovg'a turi: {user_obj.user_gift}\nRasm:{user_obj.id_picture}\nYashash manzili: {user_obj.address} " , reply_markup=markup)
+#     elif message.text == 'O\'chirish':
+#         user_obj.delete()
+#         bot.send_message(message.from_user.id,
+#                              "Simkarta o\'chirildi", reply_markup=markup)
+#     elif message.text == 'Orqaga':
+        
+#         bot.send_message(message.from_user.id,
+#                          "Bekor qilindi", reply_markup=markup)
+
+#     else:
+#         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+#         btn1 = types.KeyboardButton('Orqaga ↩️')
+#         btn2 = types.KeyboardButton('Bekor qilish 🚫')
+#         markup.add(btn1, btn2)
+#         markup_r = types.ReplyKeyboardRemove(selective=False)
+#         print(user_obj.step)
+#         if user_obj.step == 1:
+#             user_obj.full_name = message.text
+#             user_obj.step += 1
+#             user_obj.save()
+#             bot.send_message(
+#                 message.from_user.id, 'Telefon raqamingizni 9x xxx xx xx ko\'rinshda kiriting☎️:', reply_markup=markup)
+
+#         elif user_obj.step == 2:
+#             n = message.text
+#             if is_integer(n):
+#                 user_obj.tel_number = message.text
+#                 user_obj.step += 1
+#                 user_obj.save()
+#                 sim_options = SimCardOption.objects.all()
+#                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
+#                 btn1 = types.KeyboardButton('Orqaga ↩️')
+#                 btn2 = types.KeyboardButton('Bekor qilish 🚫')
+#                 for s in sim_options:
+#                     markup.add(types.KeyboardButton(s.sim_type))
+#                 markup.add(btn1, btn2)
+#                 bot.send_message(message.from_user.id,
+#                                  'Sim karta turini tanlang', reply_markup=markup)
+#             else:
+#                 bot.send_message(message.from_user.id,
+#                                  'Iltimos to\'g\'ri ma\'lumot kiriting🙅‍♂️')
+#                 bot.send_message(
+#                     message.from_user.id, 'Telefon raqamingizni 9x xxx xx xx ko\'rinshda kiriting☎️:', reply_markup=markup)
+
+#         elif user_obj.step == 3: 
+#             obj = SimCardOption.objects.filter(sim_type=message.text).first()
+#             user_obj.sim_type = obj
+#             user_obj.step += 1
+#             user_obj.save()
+#             markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
+#             btn1 = types.KeyboardButton('Orqaga ↩️')
+#             btn2 = types.KeyboardButton('Bekor qilish 🚫')
+            
+#             gifts = Gift.objects.all()
+#             for g in gifts:
+#                 markup.add(types.KeyboardButton(g.name))
+#             markup.add(btn1, btn2)
+#             bot.send_message(
+#                 message.from_user.id, 'Sovga turini tanlang:', reply_markup=markup)
+    
+#         elif user_obj.step == 4: 
+#             obj = Gift.objects.filter(name=message.text).first()
+#             user_obj.user_gift = obj
+#             user_obj.step += 1
+#             user_obj.save()
+#             bot.send_message(message.from_user.id, "Passportingiz yoki ID kartangizning oldi orqa rasmini jo'nating:", reply_markup=markup_r)
+       
+#         elif user_obj.step == 5:
+#             raw = message.photo[1].file_id
+#             path = raw + ".jpg"
+#             file_info = bot.get_file(raw)
+#             downloaded_file = bot.download_file(file_info.file_path)
+#             content = ContentFile(downloaded_file)
+#             user_obj.id_picture.save(path, content, save=True)
+#             user_obj.step += 1
+#             user_obj.save()
+#             bot.send_message(
+#                 message.from_user.id, 'Manzilinginzi kiriting🏠:', reply_markup=markup)
+
+#         elif user_obj.step == 6:
+#             raw = message.photo[1].file_id
+#             path = raw + ".jpg"
+#             file_info = bot.get_file(raw)
+#             downloaded_file = bot.download_file(file_info.file_path)
+#             content = ContentFile(downloaded_file)
+#             user_obj.id_picture.save(path, content, save=True)
+#             user_obj.step += 1
+#             user_obj.save()
+#             bot.send_message(
+#                 message.from_user.id, 'Manzilinginzi kiriting🏠:', reply_markup=markup)
+#         elif user_obj.step == 6:
+#             user_obj.address = message.text
+#             user_obj.step += 1
+#             user_obj.save()
+#             bot.send_message(message.from_user.id,
+#                          f"F I SH: {user_obj.full_name}\nTelefon raqam: {user_obj.tel_number}\nTanlangan sim karta turi:{user_obj.sim_type}\nTanlangan sovg'a turi: {user_obj.user_gift}\nRasm:{user_obj.id_picture}\nYashash manzili: {user_obj.address} " , reply_markup=markup)
+            
+#             markup = types.ReplyKeyboardMarkup(
+#                 resize_keyboard=True, row_width=2)
+#             btn1 = types.KeyboardButton('Orqaga ↩️')
+#             btn2 = types.KeyboardButton('Bekor qilish 🚫')
+#             btn3 = types.KeyboardButton('Tasdiqlash✅')
+#             markup.add(btn1, btn2, btn3)
+#             bot.send_message(message.from_user.id,
+#                          "Ma'lumotlar to'g'riligini tasdiqlang" , reply_markup=markup)

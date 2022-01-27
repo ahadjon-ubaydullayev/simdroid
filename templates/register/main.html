@@ -1,0 +1,26 @@
+
+{% for obj in user_orders %}
+
+<h1> 
+	User: {{obj.owner}}<br>
+	Full Name: {{obj.full_name}}<br>
+	Id: {{obj.id}}<br>
+	Sim Type: {{obj.sim_type}}<br>
+
+</h1>
+<!-- <h1>bot Users: {{bot_users}}</h1> -->
+{%endfor%}
+
+
+
+{% for obj in objects %}
+
+<h1> 
+	User: {{obj.owner.full_name}}<br>
+	
+
+</h1>
+<!-- <h1>bot Users: {{bot_users}}</h1> -->
+{%endfor%}
+
+
