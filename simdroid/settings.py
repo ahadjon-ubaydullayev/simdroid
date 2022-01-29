@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-xvvws8-g8-v49*a^68uwe^v0l#po#9-f!e1vj(czp$s5$xe_x!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['simdroid.herokuapp.com', '127.0.0.1', '993b-84-54-122-108.ngrok.io']
+ALLOWED_HOSTS = ['simdroid.herokuapp.com', '127.0.0.1', '262f-84-54-122-12.ngrok.io']
 
 
 # Application definition

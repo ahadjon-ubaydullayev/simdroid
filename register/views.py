@@ -41,42 +41,63 @@ def greeting(message):
             client = Client.objects.get(user_id=message.chat.id)
             client.step = 0
             client.save()
-
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    btn1 = types.KeyboardButton('Simkarta buyurtma berish')
-    btn2 = types.KeyboardButton('Mening buyurtmalarim')
-    btn3 = types.KeyboardButton('Linephone ')
-    btn4 = types.KeyboardButton('Info📕')
-    markup.add(btn1, btn2, btn3, btn4)
+    language_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
+    uzbek = types.KeyboardButton("🇺🇿 O'zbek")
+    english = types.KeyboardButton("🇬🇧 English")
+    russian = types.KeyboardButton("🇷🇺 Russian")
+    language_markup.add(uzbek, english, russian)
     bot.send_message(message.from_user.id,
-                  'menyu:\n', reply_markup=markup)
-    markup.add(btn1, btn2, btn3, btn4)
+                  'Iltimos kerakli tilni tanlang:\n', reply_markup=language_markup)
+    
     
 
 @bot.message_handler(commands=['info'])
-def info(message):
-    
+def info(message):    
     bot.send_message(message.from_user.id,
                      'Mavjud foydalanuvchilar haqida ma\'lumot')
-    
- 
+
 
 @bot.message_handler(func=lambda message: True, content_types=['photo', 'text'] )
 def register_view(message):
     client = Client.objects.get(user_id=message.from_user.id)
-    print('client: ', client)
-    user_commands = ['Tasdiqlash✅', 'Orqaga ↩️', 'Mening buyurtmalarim', 'My orders', 'Orqaga', 'O\'chirish', 'Bekor qilish 🚫', 'Ma\'lumot olish📕', 'Simkarta buyurtma berish','Order simcard', 'Info📕', 'Cancel 🚫', 'Back ↩️', 'Confirm✅', 'Simkartani o\'chirish'] 
-    if client.step == 0:   
-        if message.text not in user_commands:
-            bot.send_message(message.from_user.id, 'Iltimos kerakli buyruqni tanlang!')
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    btn1 = types.KeyboardButton('Simkarta buyurtma berish')
-    btn2 = types.KeyboardButton('Mening buyurtmalarim')
-    btn3 = types.KeyboardButton('Linephone ')
-    btn4 = types.KeyboardButton('Ma\'lumot olish📕')
-    markup.add(btn1, btn2, btn3, btn4)
 
-    if message.text == 'Simkarta buyurtma berish':  
+    main_markup_uzbek = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    btn1_u = types.KeyboardButton('Simkarta buyurtma berish')
+    btn2_u = types.KeyboardButton('Mening buyurtmalarim')
+    btn3_u = types.KeyboardButton('Linephone ')
+    btn4_u = types.KeyboardButton('Ma\'lumot olish📕')
+    main_markup_uzbek.add(btn1_u, btn2_u, btn3_u, btn4_u)
+
+    main_markup_english = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    btn1_e = types.KeyboardButton('Order simcard')
+    btn2_e = types.KeyboardButton('My orders')
+    btn3_e = types.KeyboardButton('Linephone ')
+    btn4_e = types.KeyboardButton('Info📕')
+    main_markup_english.add(btn1_e, btn2_e, btn3_e, btn4_e)
+
+    main_markup_russian = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    btn1_r = types.KeyboardButton('Заказать симкарту')
+    btn2_r = types.KeyboardButton('Мои заказы')
+    btn3_r = types.KeyboardButton('Linephone ')
+    btn4_r = types.KeyboardButton('Информация📕')
+    main_markup_russian.add(btn1_r, btn2_r, btn3_r, btn4_r)
+
+    if message.text == "🇺🇿 O'zbek":
+        client.language = 'uz'
+        client.save()
+        bot.send_message(message.from_user.id, 'Menyu:', reply_markup=main_markup_uzbek)
+    elif message.text == "🇬🇧 English":
+        client.language = 'en'
+        client.save()
+        bot.send_message(message.from_user.id, 'Menu', reply_markup=main_markup_english)
+    elif message.text == "🇷🇺 Russian":
+        client.language = 'ru'
+        client.save()
+        bot.send_message(message.from_user.id, 'Меню:', reply_markup=main_markup_russian)
+    lan = client.language
+    user_commands = ['Tasdiqlash✅', 'Orqaga ↩️', '🇺🇿 O\'zbek', '🇬🇧 English', '🇷🇺 Russian', 'Mening buyurtmalarim', 'My orders', 'Orqaga', 'O\'chirish', 'Bekor qilish 🚫', 'Ma\'lumot olish📕', 'Simkarta buyurtma berish','Order simcard', 'Info📕', 'Cancel 🚫', 'Back ↩️', 'Confirm✅', 'Simkartani o\'chirish'] 
+
+    if (message.text == 'Simkarta buyurtma berish' or message.text == 'Order simcard' or message.text == 'Заказать симкарту'):  
         order = SimOrder.objects.create(
             owner=client,
             sim_type=SimCardOption.objects.first(),
@@ -90,23 +111,27 @@ def register_view(message):
         order.save()
         client.step = 1
         client.save()
-        bot.send_message(message.from_user.id, 'Iltimos, simkarta buyurtma berish uchun quyidagi ma\'lumotlarni kiriting')   
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-        btn2 = types.KeyboardButton('Bekor qilish 🚫')
-        markup.add(btn2)
-        
-        bot.send_message(
+        if lan == 'uz':
+            bot.send_message(message.from_user.id, 'Iltimos, simkarta buyurtma berish uchun quyidagi ma\'lumotlarni kiriting:')   
+            btn2 = types.KeyboardButton('Bekor qilish 🚫')
+            markup.add(btn2)
+            bot.send_message(
             message.from_user.id, 'Ismingiz va familiyangizni kiriting:', reply_markup=markup)
-    elif message.text == 'Order simcard':     
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-        cancel = types.KeyboardButton('Cancel 🚫')
-        markup.add(cancel)
-        order.step = 1
-        order.save()
-        bot.send_message(
-            message.from_user.id, 'Please enter your full name', reply_markup=markup)
+        elif lan == 'en':
+            bot.send_message(message.from_user.id, 'Please, enter your credentials to order a simcard:')
+            btn2 = types.KeyboardButton('Cancel 🚫')
+            markup.add(btn2)
+            bot.send_message(
+            message.from_user.id, 'Enter your last and first name:', reply_markup=markup)
+        elif lan == 'ru':
+            bot.send_message(message.from_user.id, 'Пожалуйста, введите свои данные, чтобы заказать сим-карту:')
+            btn2 = types.KeyboardButton('Отмена 🚫')
+            markup.add(btn2)
+            bot.send_message(
+            message.from_user.id, 'Введите свою фамилию и имя:', reply_markup=markup)
+
     elif message.text == 'Ma\'lumot olish📕':
-        clients = Client.objects.all()
         bot.send_message(message.from_user.id,
                          "Bot haqida ma\'lumot:")
         for u in clients:
@@ -121,58 +146,46 @@ def register_view(message):
         order = SimOrder.objects.filter(owner=client, active_sim=True).first()
         order.delete()
         bot.send_message(message.from_user.id,
-                         "Bekor qilindi\n", reply_markup=markup)
+                         "Bekor qilindi\n", reply_markup=main_markup_uzbek)
     
     elif message.text == 'Cancel 🚫':
         order = SimOrder.objects.filter(owner=client, active_sim=True).first()
         order.delete()
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-        btn1 = types.KeyboardButton('Order simcard')
-        btn2 = types.KeyboardButton('My orders')
-        btn3 = types.KeyboardButton('Linephone ')
-        btn4 = types.KeyboardButton('Info📕')
-        markup.add(btn1, btn2, btn3, btn4)
         bot.send_message(message.from_user.id,
-                         "Cancelled\n", reply_markup=markup)
-    
-    elif message.text == 'Orqaga ↩️':
-        order = SimOrder.objects.filter(owner=client, active_sim=True).first()
-        order.step -= 1
-        order.save()
-        cancel_func(message)
-    
-    elif message.text == 'Back ↩️':
-        order = SimOrder.objects.filter(owner=client, active_sim=True).first()
-        order.step -= 1
-        order.save()
-        cancel_func(message)
+                         "Cancelled\n", reply_markup=main_markup_english)
 
+    elif message.text == 'Отмена 🚫':
+        order = SimOrder.objects.filter(owner=client, active_sim=True).first()
+        order.delete()
+        bot.send_message(message.from_user.id,
+                         "Отменено\n", reply_markup=main_markup_russian)
+    
+    elif message.text in ['Orqaga ↩️', 'Back ↩️', 'Назад ↩️']:
+        order = SimOrder.objects.filter(owner=client, active_sim=True).first()
+        order.step -= 1
+        order.save()
+        cancel_func(message)
+    
     elif message.text == 'Linephone':
         bot.send_message(message.from_user.id,
                           "Linephone\n")
 
-    elif message.text == 'Tasdiqlash✅':
+    elif message.text in ['Tasdiqlash✅', 'Confirm✅', 'Подтвердить✅']:
         order = SimOrder.objects.filter(owner=client, step=8).first()
         order.step = 9
         order.active_sim = False
         order.save()
-        bot.send_message(message.from_user.id,
-                         "Buyurtmangiz qabul qilindi!", reply_markup=markup)
-
-    elif message.text == 'Confirm✅':
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-        btn1 = types.KeyboardButton('Order simcard')
-        btn2 = types.KeyboardButton('My orders')
-        btn3 = types.KeyboardButton('Linephone ')
-        btn4 = types.KeyboardButton('Info📕')
-        markup.add(btn1, btn2, btn3, btn4)
-        order = SimOrder.objects.filter(owner=client, step=8).first()
-        order.step = 9
-        order.active_sim = False
-        order.save()
-        bot.send_message(message.from_user.id,
-                         "Your order has been accepted!", reply_markup=markup)
-    elif message.text == 'Mening buyurtmalarim': # use callback query use loops to retrieve objects from database
+        if lan == 'uz':
+            bot.send_message(message.from_user.id,
+                         "Buyurtmangiz qabul qilindi!", reply_markup=main_markup_uzbek)
+        elif lan == 'en':
+            bot.send_message(message.from_user.id,
+                         "Your order has been accepted!", reply_markup=main_markup_english)
+        elif lan == 'ru':
+            bot.send_message(message.from_user.id,
+                         "Ваш заказ принят!", reply_markup=main_markup_russian)
+    
+    elif (message.text == 'Mening buyurtmalarim' or message.text == 'My orders' or message.text == 'Мои заказы'): # use callback query use loops to retrieve objects from database
         markup = types.InlineKeyboardMarkup(row_width=2)
         orders = SimOrder.objects.filter(owner=client, active_sim=False)
         if len(orders) != 0:
@@ -181,8 +194,15 @@ def register_view(message):
                 markup.add(types.InlineKeyboardButton(f"{obj}", callback_data=f"{order.id}"),
                            types.InlineKeyboardButton("❌", callback_data=f"{order.id}")
                     )
-            bot.send_message(message.from_user.id,
-                          "Sizning buyurtmalaringiz:\n", reply_markup=markup)
+            if lan == 'uz':
+                bot.send_message(message.from_user.id,
+                              "Sizning buyurtmalaringiz:\n", reply_markup=markup)
+            elif lan == 'en':
+                bot.send_message(message.from_user.id,
+                              "Your orders:\n", reply_markup=markup)
+            elif lan == 'ru':
+                bot.send_message(message.from_user.id,
+                              "Ваши заказы:\n", reply_markup=markup)
         else:
             bot.send_message(message.from_user.id,
                           "Sizda hozircha buyurtmalar mavjud emas.\n", reply_markup=markup)
@@ -196,46 +216,95 @@ def register_view(message):
                          "Bekor qilindi", reply_markup=markup)
 
     else:
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        btn1 = types.KeyboardButton('Orqaga ↩️')
-        btn2 = types.KeyboardButton('Bekor qilish 🚫')
-        markup.add(btn1, btn2)
-        markup_r = types.ReplyKeyboardRemove(selective=False)
         order = SimOrder.objects.filter(owner=client, active_sim=True).first()
+        
+        secordary_markup_u = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        btn1_u = types.KeyboardButton('Orqaga ↩️')
+        btn2_u = types.KeyboardButton('Bekor qilish 🚫')
+        secordary_markup_u.add(btn1_u, btn2_u)
+
+        secordary_markup_e = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        btn1_e = types.KeyboardButton('Back ↩️')
+        btn2_e = types.KeyboardButton('Cancel 🚫')
+        secordary_markup_e.add(btn1_e, btn2_e)
+
+        secordary_markup_r = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        btn1_r = types.KeyboardButton('Назад ↩️')
+        btn2_r = types.KeyboardButton('Отмена 🚫')
+        secordary_markup_r.add(btn1_r, btn2_r)
+        
         if order.step == 1:
             if str(message.text).isdigit():
-                bot.send_message(message.from_user.id,
+                if lan == 'uz': 
+                    bot.send_message(message.from_user.id,
                                  'Iltimos to\'g\'ri ma\'lumot kiriting🙅‍♂️')
-                bot.send_message(
-                    message.from_user.id, 'Ismingiz va familiyangizni kiriting:', reply_markup=markup)
+                    bot.send_message(
+                        message.from_user.id, 'Ismingiz va familiyangizni kiriting:', reply_markup=secordary_markup_u)
+                if lan == 'en': 
+                    bot.send_message(message.from_user.id,
+                                 'Please, enter correct information🙅‍♂️')
+                    bot.send_message(
+                        message.from_user.id, 'Enter your last and first name:', reply_markup=secordary_markup_e)
+                if lan == 'ru': 
+                    bot.send_message(message.from_user.id,
+                                 'Пожалуйста, введите правильную информацию🙅‍♂️')
+                    bot.send_message(
+                        message.from_user.id, 'Введите свою фамилию и имя:', reply_markup=secordary_markup_r)
             else:
                 order.full_name = message.text
                 client.first_name = message.text
                 order.step += 1
                 order.save()
                 client.save()
-                bot.send_message(
-                    message.from_user.id, 'Telefon raqamingizni 9x xxx xx xx ko\'rinshda kiriting☎️:', reply_markup=markup)
+                if lan == 'uz':
+                    bot.send_message(
+                        message.from_user.id, 'Telefon raqamingizni 9x xxx xx xx ko\'rinshda kiriting☎️:', reply_markup=secordary_markup_u)
+                if lan == 'en':
+                    bot.send_message(
+                        message.from_user.id, 'Enter your phone number as shown: 9x xxx xx xx☎️:', reply_markup=secordary_markup_e)
+                if lan == 'ru':
+                    bot.send_message(
+                        message.from_user.id, 'Введите свой номер телефона, как показано: 9x xxx xx xx☎️:', reply_markup=secordary_markup_r)
 
-        elif order.step == 2: # not working
+
+
+        elif order.step == 2:
             if str(message.text).isdigit():
                 order.tel_number = message.text
                 order.step += 1
                 order.save()
                 sim_options = SimCardOption.objects.all()
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
-                btn1 = types.KeyboardButton('Orqaga ↩️')
-                btn2 = types.KeyboardButton('Bekor qilish 🚫')
                 for s in sim_options:
                     markup.add(types.KeyboardButton(s.sim_type))
-                markup.add(btn1, btn2)
-                bot.send_message(message.from_user.id,
-                                 'Sim karta turini tanlang', reply_markup=markup)
+                if lan == 'uz':
+                    markup.add(btn1_u, btn2_u)
+                    bot.send_message(message.from_user.id,
+                                     'Sim karta turini tanlang:', reply_markup=markup)
+                if lan == 'en':
+                    markup.add(btn1_e, btn2_e)
+                    bot.send_message(message.from_user.id,
+                                     'Choose the simcard type:', reply_markup=markup)
+                if lan == 'ru':
+                    markup.add(btn1_r, btn2_r)
+                    bot.send_message(message.from_user.id,
+                                     'Выберите тип сим-карты', reply_markup=markup)
             else:
-                bot.send_message(message.from_user.id,
-                                 'Iltimos to\'g\'ri ma\'lumot kiriting🙅‍♂️')
-                bot.send_message(
-                    message.from_user.id, 'Telefon raqamingizni 9x xxx xx xx ko\'rinshda kiriting☎️:', reply_markup=markup)
+                if lan == 'uz':
+                    bot.send_message(message.from_user.id,
+                                     'Iltimos to\'g\'ri ma\'lumot kiriting🙅‍♂️')
+                    bot.send_message(
+                        message.from_user.id, 'Telefon raqamingizni 9x xxx xx xx ko\'rinshda kiriting☎️:', reply_markup=secordary_markup_u)
+                if lan == 'en':
+                    bot.send_message(message.from_user.id,
+                                     'Please, enter correct information🙅‍♂️')
+                    bot.send_message(
+                        message.from_user.id, 'Enter your phone number as shown: 9x xxx xx xx☎️:', reply_markup=secordary_markup_e)
+                if lan == 'ru':
+                    bot.send_message(message.from_user.id,
+                                     'Пожалуйста, введите правильную информацию🙅‍♂️')
+                    bot.send_message(
+                        message.from_user.id, 'Введите свой номер телефона, как показано: 9x xxx xx xx☎️:', reply_markup=secordary_markup_r)
 
         elif order.step == 3: 
             obj = SimCardOption.objects.filter(sim_type=message.text).first()
@@ -243,26 +312,33 @@ def register_view(message):
             order.step += 1
             order.save()
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
-            btn1 = types.KeyboardButton('Orqaga ↩️')
-            btn2 = types.KeyboardButton('Bekor qilish 🚫')
-            
             gifts = Gift.objects.all()
             for g in gifts:
                 markup.add(types.KeyboardButton(g.name))
-            markup.add(btn1, btn2)
-            bot.send_message(
-                message.from_user.id, 'Sovga turini tanlang:', reply_markup=markup)
+            if lan == 'uz':
+                markup.add(btn1_u, btn2_u)
+                bot.send_message(
+                    message.from_user.id, 'Sovga turini tanlang:', reply_markup=markup)
+            if lan == 'en':
+                markup.add(btn1_e, btn2_e)
+                bot.send_message(
+                    message.from_user.id, 'What do you want to get as a gift?\nChoose below:', reply_markup=markup)
+            if lan == 'ru':
+                markup.add(btn1_u, btn2_u)
+                bot.send_message(
+                    message.from_user.id, 'Что вы хотите получить в подарок?\nВыберите ниже:', reply_markup=markup)
     
         elif order.step == 4: 
             obj = Gift.objects.filter(name=message.text).first()
             order.user_gift = obj
             order.step += 1
             order.save()
-            markup_d = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
-            btn1 = types.KeyboardButton('Orqaga ↩️')
-            btn2 = types.KeyboardButton('Bekor qilish 🚫')
-            markup_d.add(btn1, btn2)
-            bot.send_message(message.from_user.id, "Passportingiz yoki ID kartangizning oldi qism rasmini jo'nating:", reply_markup=markup_d)
+            if lan == 'uz':
+                bot.send_message(message.from_user.id, "Passportingiz yoki ID kartangizning oldi qism rasmini jo'nating:", reply_markup=secordary_markup_u)
+            if lan == 'en':
+                bot.send_message(message.from_user.id, "Send the frontside picture of your ID or passport:", reply_markup=secordary_markup_e)
+            if lan == 'ru':
+                bot.send_message(message.from_user.id, "Отправьте фотографию своего удостоверения личности или паспорта на лицевой стороне:", reply_markup=secordary_markup_r)
        
         elif order.step == 5:
             raw = message.photo[1].file_id
@@ -273,12 +349,12 @@ def register_view(message):
             order.id_picture.save(path, content, save=True)
             order.step += 1
             order.save()
-            markup_d = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
-            btn1 = types.KeyboardButton('Orqaga ↩️')
-            btn2 = types.KeyboardButton('Bekor qilish 🚫')
-            markup_d.add(btn1, btn2)
-            bot.send_message(
-                message.from_user.id, 'Passportingiz yoki ID kartangizning orqa qism rasmini jo\'nating:', reply_markup=markup_d)
+            if lan == 'uz':
+                bot.send_message(message.from_user.id, "Passportingiz yoki ID kartangizning orqa qism rasmini jo'nating:", reply_markup=secordary_markup_u)
+            if lan == 'en':
+                bot.send_message(message.from_user.id, "Send the backside picture of your ID or passport:", reply_markup=secordary_markup_e)
+            if lan == 'ru':
+                bot.send_message(message.from_user.id, "Отправьте фотографию обратной стороны вашего удостоверения личности или паспорта:", reply_markup=secordary_markup_r)
 
         elif order.step == 6:
             raw = message.photo[1].file_id
@@ -289,39 +365,77 @@ def register_view(message):
             order.id_picture2.save(path, content, save=True)
             order.step += 1
             order.save()
-            bot.send_message(
-                message.from_user.id, 'Manzilinginzi kiriting🏠:', reply_markup=markup)
+            if lan == 'uz':
+                bot.send_message(message.from_user.id, 'Manzilinginzi kiriting🏠:', reply_markup=secordary_markup_u)
+            if lan == 'en':
+                bot.send_message(message.from_user.id, 'Enter your address🏠:', reply_markup=secordary_markup_e)
+            if lan == 'ru':
+                bot.send_message(message.from_user.id, 'Введите свой адрес🏠:', reply_markup=secordary_markup_r)
         elif order.step == 7:
             order.address = message.text
             order.step += 1
             order.save()
-            bot.send_message(message.from_user.id,
-                         f"F I SH: {order.full_name}\nTelefon raqam: {order.tel_number}\nTanlangan sim karta turi:{order.sim_type}\nTanlangan sovg'a turi: {order.gift}\nYashash manzili: {order.address} " , reply_markup=markup)
-            
-            markup = types.ReplyKeyboardMarkup(
-                resize_keyboard=True, row_width=2)
-            btn1 = types.KeyboardButton('Orqaga ↩️')
-            btn2 = types.KeyboardButton('Bekor qilish 🚫')
-            btn3 = types.KeyboardButton('Tasdiqlash✅')
-            markup.add(btn1, btn2, btn3)
-            bot.send_message(message.from_user.id,
-                         "Ma'lumotlar to'g'riligini tasdiqlang" , reply_markup=markup)
+            if lan == 'uz':
+                bot.send_message(message.from_user.id,
+                             f"F I SH: {order.full_name}\nTelefon raqam: {order.tel_number}\nTanlangan sim karta turi:{order.sim_type}\nTanlangan sovg'a turi: {order.gift}\nYashash manzili: {order.address} " , reply_markup=secordary_markup_u)
+                btn3_u = types.KeyboardButton('Tasdiqlash✅')
+                secordary_markup_u.add(btn3_u)
+                bot.send_message(message.from_user.id,
+                             "Ma'lumotlar to'g'riligini tasdiqlang" , reply_markup=secordary_markup_u)
+            if lan == 'en':
+                bot.send_message(message.from_user.id,
+                             f"Full name: {order.full_name}\nPhone number: {order.tel_number}\nChosen sim type:{order.sim_type}\nChosen gift: {order.gift}\nYour address: {order.address} ", reply_markup=secordary_markup_e)
+                btn3_e = types.KeyboardButton('Confirm✅')
+                secordary_markup_e.add(btn3_e)
+                bot.send_message(message.from_user.id,
+                             "Are your all credentials correct?" , reply_markup=secordary_markup_e)
+            if lan == 'ru':
+                bot.send_message(message.from_user.id,
+                             f"Полное имя: {order.full_name}\nТелефонный номер: {order.tel_number}\nВыбранный тип сим-карты:{order.sim_type}\nВыбранный подарок: {order.gift}\nВаш адрес: {order.address} " , reply_markup=secordary_markup_r) 
+                btn3_r = types.KeyboardButton('Подтвердить✅')
+                secordary_markup_r.add(btn3_r)
+                bot.send_message(message.from_user.id,
+                             "Все ли ваши учетные данные верны?" , reply_markup=secordary_markup_r)
 
 
 
 @bot.callback_query_handler(func=lambda call: True)
 def call_data(call):
     client = Client.objects.get(user_id=call.from_user.id)
+    lan = client.language
     order = SimOrder.objects.get(id=call.data)
     order.delete()
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    btn1 = types.KeyboardButton('Simkarta buyurtma berish')
-    btn2 = types.KeyboardButton('Mening buyurtmalarim')
-    btn3 = types.KeyboardButton('Linephone ')
-    btn4 = types.KeyboardButton('Ma\'lumot olish📕')
-    markup.add(btn1, btn2, btn3, btn4)
-    bot.send_message(call.from_user.id,
-                         f"O'chirildi!", reply_markup=markup)
+    
+    main_markup_uzbek = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    btn1_u = types.KeyboardButton('Simkarta buyurtma berish')
+    btn2_u = types.KeyboardButton('Mening buyurtmalarim')
+    btn3_u = types.KeyboardButton('Linephone ')
+    btn4_u = types.KeyboardButton('Ma\'lumot olish📕')
+    main_markup_uzbek.add(btn1_u, btn2_u, btn3_u, btn4_u)
+
+    main_markup_english = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    btn1_e = types.KeyboardButton('Order simcard')
+    btn2_e = types.KeyboardButton('My orders')
+    btn3_e = types.KeyboardButton('Linephone ')
+    btn4_e = types.KeyboardButton('Info📕')
+    main_markup_english.add(btn1_e, btn2_e, btn3_e, btn4_e)
+
+    main_markup_russian = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    btn1_r = types.KeyboardButton('Заказать симкарту')
+    btn2_r = types.KeyboardButton('Мои заказы')
+    btn3_r = types.KeyboardButton('Linephone ')
+    btn4_r = types.KeyboardButton('Информация📕')
+    main_markup_russian.add(btn1_r, btn2_r, btn3_r, btn4_r)
+    
+    if lan == 'uz':
+        bot.send_message(call.from_user.id,
+                         f"O'chirildi!", reply_markup=main_markup_uzbek)
+    elif lan == 'en':
+        bot.send_message(call.from_user.id,
+                         f"Deleted!", reply_markup=main_markup_english)
+    elif lan == 'ru':
+        bot.send_message(call.from_user.id,
+                         f"Удалено!", reply_markup=main_markup_russian)
 
 def is_integer(n):
     try:
@@ -334,50 +448,103 @@ def is_integer(n):
 
 def cancel_func(message):
     client = Client.objects.get(user_id=message.from_user.id)
+    lan = client.language
     order = SimOrder.objects.filter(owner=client, active_sim=True).first()
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    btn1 = types.KeyboardButton('Orqaga ↩️')
-    btn2 = types.KeyboardButton('Bekor qilish 🚫')
-    markup.add(btn1, btn2)
+    secordary_markup_u = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1_u = types.KeyboardButton('Orqaga ↩️')
+    btn2_u = types.KeyboardButton('Bekor qilish 🚫')
+    secordary_markup_u.add(btn1_u, btn2_u)
+
+    secordary_markup_e = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1_e = types.KeyboardButton('Back ↩️')
+    btn2_e = types.KeyboardButton('Cancel 🚫')
+    secordary_markup_e.add(btn1_e, btn2_e)
+
+    secordary_markup_r = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1_r = types.KeyboardButton('Назад ↩️')
+    btn2_r = types.KeyboardButton('Отмена 🚫')
+    secordary_markup_r.add(btn1_r, btn2_r)
     
     if order.step == 1: 
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2) 
-        btn2 = types.KeyboardButton('Bekor qilish 🚫')
-        markup.add(btn2)
-        bot.send_message(message.from_user.id, 'Ismingiz va familiyangizni kiriting:', reply_markup=markup)      
+        if lan == 'uz':  
+            btn2 = types.KeyboardButton('Bekor qilish 🚫')
+            markup.add(btn2)
+            bot.send_message(message.from_user.id, 'Ismingiz va familiyangizni kiriting:', reply_markup=markup)
+        elif lan == 'en':   
+            btn2 = types.KeyboardButton('Cancel 🚫')
+            markup.add(btn2)
+            bot.send_message(message.from_user.id, 'Enter your last and first name:', reply_markup=markup)
+        elif lan == 'ru':   
+            btn2 = types.KeyboardButton('Отмена 🚫')
+            markup.add(btn2)
+            bot.send_message(message.from_user.id, 'Введите свою фамилию и имя:', reply_markup=markup)      
     
-    elif order.step == 2: 
-        bot.send_message(message.from_user.id, 'Telefon raqamingizni 9x xxx xx xx ko\'rinshda kiriting☎️:', reply_markup=markup)
+    elif order.step == 2:
+        if lan == 'uz':
+            bot.send_message(message.from_user.id, 'Telefon raqamingizni 9x xxx xx xx ko\'rinshda kiriting☎️:', reply_markup=secordary_markup_u)
+        if lan == 'en':
+            bot.send_message(message.from_user.id, 'Enter your phone number as shown: 9x xxx xx xx☎️:', reply_markup=secordary_markup_e)
+        if lan == 'ru':
+            bot.send_message(message.from_user.id, 'Введите свой номер телефона, как показано: 9x xxx xx xx☎️:', reply_markup=secordary_markup_r)
     
     elif order.step == 3: 
         markup_t = types.ReplyKeyboardMarkup(resize_keyboard=True)
         sim_options = SimCardOption.objects.all()
         for s in sim_options:
             markup_t.add(types.KeyboardButton(s.sim_type))
-        markup_t.add(btn1, btn2)
-        bot.send_message(message.from_user.id,
-                                 'Sim karta turini tanlang', reply_markup=markup_t)      
+        if lan == 'uz':
+            markup_t.add(btn1_u, btn2_u)
+            bot.send_message(message.from_user.id,
+                                     'Sim karta turini tanlang:', reply_markup=markup_t)
+        elif lan == 'en':
+            markup_t.add(btn1_e, btn2_e)
+            bot.send_message(message.from_user.id,
+                                     'Choose the simcard type:', reply_markup=markup_t)
+        elif lan == 'ru':
+            markup_t.add(btn1_r, btn2_r)
+            bot.send_message(message.from_user.id,
+                                     'Выберите тип сим-карты:', reply_markup=markup_t)      
       
     elif order.step == 4:
         markup_g = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
         gifts = Gift.objects.all()
         for g in gifts:
             markup_g.add(types.KeyboardButton(g.name))
-        markup_g.add(btn1, btn2)
-        bot.send_message(
-                message.from_user.id, 'Sovga turini tanlang:', reply_markup=markup_g)   
+        if lan == 'uz':   
+            markup_g.add(btn1_u, btn2_u)
+            bot.send_message(
+                    message.from_user.id, 'Sovga turini tanlang:', reply_markup=markup_g)
+        elif lan == 'en':   
+            markup_g.add(btn1_e, btn2_e)
+            bot.send_message(
+                    message.from_user.id, 'What do you want to get as a gift?\nChoose below:', reply_markup=markup_g)
+        elif lan == 'ru':   
+            markup_g.add(btn1_r, btn2_r)
+            bot.send_message(
+                    message.from_user.id, 'Что вы хотите получить в подарок?\nВыберите ниже:', reply_markup=markup_g)   
     elif order.step == 5:
-        bot.send_message(message.from_user.id, "Passportingiz yoki ID kartangiz oldi qism rasmini jo'nating:", reply_markup=markup)
+        if lan == 'uz':
+            bot.send_message(message.from_user.id, "Passportingiz yoki ID kartangiz oldi qism rasmini jo'nating:", reply_markup=secordary_markup_u)
+        elif lan == 'en':
+            bot.send_message(message.from_user.id, "Send the frontside picture of your ID or passport:", reply_markup=secordary_markup_e)
+        elif lan == 'ru':
+            bot.send_message(message.from_user.id, "Отправьте фотографию своего удостоверения личности или паспорта на лицевой стороне:", reply_markup=secordary_markup_r)
 
     elif order.step == 6:
-        bot.send_message(message.from_user.id, "Passportingiz yoki ID kartangiz orqa qism rasmini jo'nating:", reply_markup=markup)
+        if lan == 'uz':
+            bot.send_message(message.from_user.id, "Passportingiz yoki ID kartangiz orqa qism rasmini jo'nating:", reply_markup=secordary_markup_u)
+        elif lan == 'en':
+            bot.send_message(message.from_user.id, "Send the backside picture of your ID or passport:", reply_markup=secordary_markup_e)
+        elif lan == 'ru':
+            bot.send_message(message.from_user.id, "Отправьте фотографию обратной стороны вашего удостоверения личности или паспорта:", reply_markup=secordary_markup_r)
 
-    elif order.step == 7:  
-        bot.send_message(message.from_user.id, 'Manzilinginzi kiriting🏠:', reply_markup=markup)
-
-
+    elif order.step == 7:
+        if lan == 'uz': 
+            bot.send_message(message.from_user.id, 'Manzilinginzi kiriting🏠:', reply_markup=secordary_markup_u)
+        elif lan == 'en': 
+            bot.send_message(message.from_user.id, 'Enter your address🏠:', reply_markup=secordary_markup_e)
+        elif lan == 'ru': 
+            bot.send_message(message.from_user.id, 'Введите свой адрес🏠:', reply_markup=secordary_markup_r)
 
 bot.polling()
-
-
-# check if the message in the given models gifts, sim types
