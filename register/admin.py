@@ -4,12 +4,13 @@ from .models import *
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['first_name', 'cr_on', 'username']
+
 
 @admin.register(SimOrder)
 class SimOrderAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'sim_type']
-    pass
+    list_display = ['full_name', 'sim_type', 'gift', 'address', 'tel_number']
+    
 
 @admin.register(SimCardOption)
 class SimCardOptionAdmin(admin.ModelAdmin):

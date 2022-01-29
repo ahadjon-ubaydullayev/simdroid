@@ -20,3 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('register.urls'))
 ]
+
+admin.site.site_header  =  "Simdroid customer management"  

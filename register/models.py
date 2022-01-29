@@ -4,9 +4,11 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
-
 class SimCardOption(models.Model):
     sim_type = models.CharField(max_length=50)
+
+    class  Meta:  
+        verbose_name_plural = "Sim karta turlari"
  
     def __str__(self):
         return(self.sim_type)
@@ -15,9 +17,11 @@ class SimCardOption(models.Model):
 class Gift(models.Model):
     name = models.CharField(max_length=50)
 
+    class  Meta:  
+        verbose_name_plural = "Sovg'alar"
+
     def __str__(self):
         return self.name
-
 
 
 class Client(models.Model):
@@ -28,6 +32,9 @@ class Client(models.Model):
     active = models.BooleanField(default=True)
     language = models.CharField(max_length=20, null=True, blank=True)
     step = models.IntegerField(default=0)
+
+    class  Meta:  
+        verbose_name_plural = "Mijozlar"
 
     def __str__(self):
         return self.first_name
@@ -45,12 +52,9 @@ class SimOrder(models.Model):
     step = models.IntegerField(default=0)
     active_sim = models.BooleanField(default=False)
 
-    
+    class  Meta:  
+        verbose_name_plural = "Buyurtmalar"
 
+    def __str__(self):
+        return("Buyurtmalar")
 
-# tarif
-# fish
-# sovga
-# adress
-# pic1, pic2
-# tel_number
