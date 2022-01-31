@@ -405,6 +405,7 @@ def call_data(call):
     lan = client.language
     order = SimOrder.objects.get(id=call.data)
     order.delete()
+    # send the orders again after deleting
     
     main_markup_uzbek = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     btn1_u = types.KeyboardButton('Simkarta buyurtma berish')
