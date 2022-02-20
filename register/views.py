@@ -269,7 +269,7 @@ def register_view(message):
                 sim_options = SimCardOption.objects.all()
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
                 for s in sim_options:
-                    markup.add(types.KeyboardButton(s.sim_type))
+                    markup.add(types.KeyboardButton(s.sim_option))
                 if lan == 'uz':
                     markup.add(btn1_u, btn2_u)
                     bot.send_message(message.from_user.id,
@@ -300,8 +300,8 @@ def register_view(message):
                         message.from_user.id, 'Введите свой номер телефона, как показано: 9x xxx xx xx☎️:', reply_markup=secordary_markup_r)
 
         elif order.step == 3: 
-            obj = SimCardOption.objects.filter(sim_type=message.text).first()
-            order.sim_type = obj
+            obj = SimCardOption.objects.filter(sim_option=message.text).first()
+            order.sim_option = obj
             order.step += 1
             order.save()
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
@@ -486,7 +486,7 @@ def cancel_func(message):
         markup_t = types.ReplyKeyboardMarkup(resize_keyboard=True)
         sim_options = SimCardOption.objects.all()
         for s in sim_options:
-            markup_t.add(types.KeyboardButton(s.sim_type))
+            markup_t.add(types.KeyboardButton(s.sim_option))
         if lan == 'uz':
             markup_t.add(btn1_u, btn2_u)
             bot.send_message(message.from_user.id,
