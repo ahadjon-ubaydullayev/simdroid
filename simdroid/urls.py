@@ -18,7 +18,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('register.urls'))
+    path('', include('register.urls')),
+    path('manage/', include('management.urls')),
 ]
 
 admin.site.site_header  =  "Simdroid customer management"  

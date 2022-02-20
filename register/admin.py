@@ -14,9 +14,9 @@ class SimOrderAdmin(admin.ModelAdmin):
 
 @admin.register(SimCardOption)
 class SimCardOptionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['sim_option']
 
 
 @admin.register(Gift)
 class GiftAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['name']

@@ -5,13 +5,13 @@ from django.contrib.auth.models import User
 
 
 class SimCardOption(models.Model):
-    sim_type = models.CharField(max_length=50)
+    sim_option = models.CharField(max_length=50)
 
     class  Meta:  
         verbose_name_plural = "Sim karta turlari"
  
     def __str__(self):
-        return(self.sim_type)
+        return(self.sim_option)
 
 
 class Gift(models.Model):

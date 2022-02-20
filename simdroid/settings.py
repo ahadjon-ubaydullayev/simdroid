@@ -26,9 +26,9 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = 'django-insecure-xvvws8-g8-v49*a^68uwe^v0l#po#9-f!e1vj(czp$s5$xe_x!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['simdroid.herokuapp.com', '127.0.0.1', '262f-84-54-122-12.ngrok.io']
+ALLOWED_HOSTS = ['simdroid.herokuapp.com', '127.0.0.1', '019b-213-230-102-194.ngrok.io']
 
 
 # Application definition
@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'register',
+    'rest_framework',
+    'management',
+    'rest_framework_datatables'
 ]
 
 MIDDLEWARE = [
@@ -86,6 +89,20 @@ DATABASES = {
 }
 
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework_datatables.renderers.DatatablesRenderer',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework_datatables.filters.DatatablesFilterBackend',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework_datatables.pagination.DatatablesPageNumberPagination',
+    'PAGE_SIZE': 15,
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -120,12 +137,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 MEDIA_ROOT = '/images/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static/images')
+    os.path.join(BASE_DIR, 'static')
     ]
 
 # Default primary key field type

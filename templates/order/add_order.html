@@ -1,0 +1,112 @@
+{% extends "home.html" %}
+{% load static %}
+{% block title %}Add Order{% endblock %}
+{% block content %}
+  <br>
+  <div class="container">
+    <div class="content">
+      <div class="row">
+        <div class="col-md-8 col-sm-12 mx-auto">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Add New Order</h3>
+              <div class="card-tools">
+                <a type="button" href="{% url 'orders' %}" class="btn btn-tool">
+                  <i class="fas fa-window-close"></i></a>
+              </div>
+            </div>
+            <form id="add_client" class="container pg-5" method="post">
+              <div class="card-body">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add">
+                <div class="form-group">              
+                        <label >Owner</label>
+                        <select id='owner' name="owner" class="custom-select" required>
+                         {% for c in clients %}
+                          <option value="{{ c.id }}">{{ c.first_name }}</option>
+                         {% endfor %}
+                        </select>       
+                </div>
+                <div class="form-group">
+                    <label>Full name</label>
+                    <input type="text" name="full_name" class="form-control" placeholder="Full name" required>
+                </div>
+                <div class="form-group">
+                  <label>Phone number</label>
+                  <input type="text" name="tel_number" class="form-control" placeholder="+998 9x xxx xx xx" required>
+                </div>
+                <div class="form-group">            
+                        <label  placeholder="AA 7777777">Simcard type</label>
+                        <select id='sim_type' name="sim_type" class="custom-select" required>
+                         {% for s in sims %}
+                          <option value="{{ s.id }}">{{ s.sim_type }}</option>
+                         {% endfor %}
+                        </select>                   
+                </div>
+                <div class="form-group">
+                        <label  placeholder="AA 7777777">Gift</label>
+                        <select id='gift' name="gift" class="custom-select" required>
+                          {% for p in presents %}
+                          <option value="{{ p.id }}">{{ p.name }}</option>
+                         {% endfor %}
+                        </select>
+                </div>
+                <div class="form-group">
+                  <label>Address</label>
+                  <input type="text" name="address" class="form-control" placeholder="Name" required>
+                </div>
+                <button type="submit" class="btn btn-info float-right">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
+{% block js %}
+  {{ block.super }}
+  <script>
+  $(document).ready(function () {
+
+  });
+    $("#add_client").submit(function (e) {
+      e.preventDefault();
+      var formData = $(this).serialize();
+      $.ajax({
+        type: 'POST',
+        url: '{% url 'orders' %}',
+        data: formData,
+        success: function (response) {
+          console.log(response);
+          if (response.success === true){
+            $('#add_client').trigger('reset');
+            $(document).Toasts('create',{
+              title: 'Info',
+              body: 'Saved Successfully!',
+              autohide: true,
+              delay: 3000,
+              fade: true,
+              class: 'bg-success'
+            })
+          } else {
+            $(document).Toasts('create',{
+              title: 'Error',
+              body: response.error,
+              autohide: true,
+              delay: 3000,
+              fade: true,
+              class: 'bg-danger'
+            })
+          }
+        },
+        error: function (response) {
+          console.log(response);
+          alert(response.status + ' :: ' + response.responseText)
+        }
+      })
+    })
+  </script>
+{% endblock %}

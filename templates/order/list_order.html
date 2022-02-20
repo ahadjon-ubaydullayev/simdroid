@@ -1,0 +1,173 @@
+{% extends "home.html" %}
+{% load static %}
+{% block title %} Orders {% endblock %}
+{% block content %}
+  <div class="row" style="width: 100%; padding-top: 2px; margin: 0;">
+    <div class="col-sm-12">
+      <div id="buttonrow" style="display: inline-block">
+        <button class="btn btn-primary" onclick="addOrder()">Add</button>
+        <button class="btn btn-primary" onclick="editOrder()">Edit</button>
+        <button class="btn btn-warning" onclick="deleteOrder()">Delete</button>
+      </div>
+      <div style="float: right">
+          <input type="text" class="form-control" id="custom_searchbox">
+        </div>
+    </div>
+    <div class="col-sm-12">
+      <table id="client_table" class="table table-bordered table-hover dataTable dtr-inline" role="grid" style="width: 100%;">
+        <thead>
+          <tr role="row">
+            <th>ID</th>
+            <th>FULL NAME</th>
+            <th>ADDRESS</th>
+            <th>TEL NUMBER</th>
+            <th>SIM TYPE</th>
+            <th>GIFT</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+
+{#  Add MOdal#}
+  <div id="addModal" class="modal fade">
+    
+  </div>
+
+{#  Edit Modal#}
+  <div id="editModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Edit Order</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+         
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block js %}
+  {{ block.super }}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-autofill/js/dataTables.autoFill.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-colreorder/js/dataTables.colReorder.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-keytable/js/dataTables.keyTable.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-scroller/js/dataTables.scroller.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-select/js/dataTables.select.min.js' %}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script>
+        $(document).ready(function () {
+      var obec=5;
+      var table = $('#client_table').DataTable({
+          dom: '<"top"<\'row\'<\'col-md-8\'B><\'col-md-4\'f>>>rt<"bottom"<\'row\'<\'col-md-6\'i><\'col-md-6\'p>>>',
+          buttons: ['pdf', 'excel', 'print'],
+          retrieve: true,
+          scroller: true,
+          processing: true,
+          serverSide: true,
+          stateSave: true,
+          colReorder: true,
+          fixedHeader: true,
+          keys: true,
+          responsive: {
+            details: {
+              display: $.fn.dataTable.Responsive.display.modal({
+                header: function (row) {
+                  var data = row.data();
+                  return 'Details for ' + data.full_name;
+                }
+              }),
+              renderer: $.fn.dataTable.Responsive.renderer.tableAll()
+            }
+          },
+          scrollY: "70vh",
+          select: true,
+          ajax: "/manage/api/order/?format=datatables",
+          columns: [
+            {"data": "id"},
+            {"data": "full_name"},
+            {"data": "address"},
+            {"data": "tel_number"},
+            {"data": "sim_type"},
+            {"data": "gift"}
+       
+          ]
+        }
+      );
+      table.buttons().container().appendTo($('#buttonrow'));
+      $("#custom_searchbox").keyup(function () {
+        table.search(this.value).draw();
+      });
+
+    });
+
+    function addOrder() {
+      window.location.href = '{% url "orders" %}?add=true';
+      $('#addModal').modal();
+    }
+
+    function editOrder() {
+     window.location.href = '{% url "orders" %}?id=' + selected_row.id;
+    }
+    function deleteOrder() {
+      if (confirm('Delete ' + selected_row.full_name + ' from list ? ')){
+        post_data = {};
+        post_data.id = selected_row.id;
+        post_data.action = 'delete';
+        $.ajax({url: '{% url 'orders' %}',
+                type: 'POST',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: post_data,
+                success: function (response) {
+                      if (response.success === true){
+                         $(document).Toasts('create',{
+                          title: 'Info',
+                          body: 'Deleted Successfully!',
+                          autohide: true,
+                          delay: 3000,
+                          fade: true,
+                          class: 'bg-success'
+                          });
+                         table.ajax.reload();
+                      } else {
+                        $(document).Toasts('create',{
+                        title: 'Error',
+                        body: response.error,
+                        autohide: true,
+                        delay: 3000,
+                        fade: true,
+                        class: 'bg-danger'
+                        })
+                      }
+                }
+        })
+      }
+    }
+    function checkActBtn() {
+      if (selected_row === null) {
+        $(".act_btn").attr("disabled", true);
+      } else {
+        $(".act_btn").attr("disabled", false);
+      }
+    }
+
+  </script>
+  <style>
+  .dataTables_filter {
+     display: none;
+}
+</style>
+{% endblock %}

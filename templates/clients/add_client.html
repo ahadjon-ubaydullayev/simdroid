@@ -1,0 +1,87 @@
+{% extends "home.html" %}
+{% load static %}
+{% block title %}Add Client{% endblock %}
+{% block content %}
+  <br>
+  <div class="container">
+    <div class="content">
+      <div class="row">
+        <div class="col-md-8 col-sm-12 mx-auto">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Add New Client</h3>
+              <div class="card-tools">
+                <a type="button" href="{% url 'clients' %}" class="btn btn-tool">
+                  <i class="fas fa-window-close"></i></a>
+              </div>
+            </div>
+            <form id="add_client" class="container pg-5" method="post">
+              <div class="card-body">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add">
+                <div class="form-group">              
+                      <label>User Id</label>
+                    <input type="text" name="user_id" class="form-control" placeholder="User Id" required>  
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" class="form-control" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                  <label>Full name</label>
+                  <input type="text" name="first_name" class="form-control" placeholder="Full Name" required>
+                </div>
+                 <button type="submit" class="btn btn-info float-right">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
+{% block js %}
+  {{ block.super }}
+  <script>
+  $(document).ready(function () {
+
+  });
+    $("#add_client").submit(function (e) {
+      e.preventDefault();
+      var formData = $(this).serialize();
+      $.ajax({
+        type: 'POST',
+        url: '{% url 'clients' %}',
+        data: formData,
+        success: function (response) {
+          if (response.success === true){
+            $('#add_client').trigger('reset');
+            $(document).Toasts('create',{
+              title: 'Info',
+              body: 'Saved Successfully!',
+              autohide: true,
+              delay: 3000,
+              fade: true,
+              class: 'bg-success'
+            });
+            window.location.href='{% url 'clients' %}'
+          } else {
+            $(document).Toasts('create',{
+              title: 'Error',
+              body: response.error,
+              autohide: true,
+              delay: 3000,
+              fade: true,
+              class: 'bg-danger'
+            })
+          }
+        },
+        error: function (response) {
+          console.log(response);
+          alert(response.status + ' :: ' + response.responseText)
+        }
+      })
+    })
+  </script>
+{% endblock %}

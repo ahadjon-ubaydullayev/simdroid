@@ -134,13 +134,14 @@ def register_view(message):
     elif message.text == 'Ma\'lumot olish📕':
         bot.send_message(message.from_user.id,
                          "Bot haqida ma\'lumot:")
-        for u in clients:
-            bot.send_message(message.from_user.id,
-                             f"Ism Familiyasi👤 - {u.full_name}")
 
     elif message.text == 'Info📕':
         bot.send_message(message.from_user.id,
                          "Some text")
+
+    elif message.text == 'Информация📕':
+        bot.send_message(message.from_user.id,
+                         "Информация📕")
     
     elif message.text == 'Bekor qilish 🚫':
         order = SimOrder.objects.filter(owner=client, active_sim=True).first()
@@ -206,14 +207,6 @@ def register_view(message):
         else:
             bot.send_message(message.from_user.id,
                           "Sizda hozircha buyurtmalar mavjud emas.\n", reply_markup=markup)
-        
-    elif message.text == 'O\'chirish':
-        user_obj.delete()
-        bot.send_message(message.from_user.id,
-                             "Simkarta o\'chirildi", reply_markup=markup)
-    elif message.text == 'Orqaga':
-        bot.send_message(message.from_user.id,
-                         "Bekor qilindi", reply_markup=markup)
 
     else:
         order = SimOrder.objects.filter(owner=client, active_sim=True).first()
