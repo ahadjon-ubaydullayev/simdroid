@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.base import ModelState
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 class SimCardOption(models.Model):
@@ -11,7 +12,7 @@ class SimCardOption(models.Model):
         verbose_name_plural = "Sim karta turlari"
  
     def __str__(self):
-        return(self.sim_option)
+        return self.sim_option
 
 
 class Gift(models.Model):
@@ -57,4 +58,7 @@ class SimOrder(models.Model):
 
     def __str__(self):
         return("Buyurtmalar")
+
+    def get_absolute_url(self):
+        return reverse('order_detail', args=[self.id])
 

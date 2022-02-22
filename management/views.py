@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 import json
 from register.models import SimCardOption, Gift, Client, SimOrder
 from .serializers import SimOrderSerializer
@@ -35,7 +35,13 @@ def orders(request):
                         }
             return render(request, 'order/edit_order.html', context=context)
         else:
-            return render(request, 'order/main.html')
+            orders = SimOrder.objects.all()
+            return render(request, 'order/main.html', 
+                {
+                'orders':orders, 
+                'request': request
+                }
+                )
 
 
 def clients(request):
@@ -56,3 +62,7 @@ def clients(request):
         else:
             return render(request, 'clients/list_client.html')
 
+
+def order_detail(request, id):
+    sim_order = get_object_or_404(SimOrder, id=id)
+    return render(request, 'order/detail.html', {'sim_order':sim_order})

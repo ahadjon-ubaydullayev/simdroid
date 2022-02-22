@@ -25,6 +25,8 @@
             <th>TEL NUMBER</th>
             <th>SIM TYPE</th>
             <th>GIFT</th>
+            <th>Pic</th>
+            <th>pic2</th>
           </tr>
         </thead>
       </table>
@@ -68,6 +70,15 @@
                 <div class="form-group">              
                     <label>Gift</label>
                     <h4 id="gift" class="userId"></h4>
+                </div>  
+                <div class="form-group">              
+                    <label>Picture</label>
+                    <h4 id="id_picture" class="userId">
+                     </h4>
+                </div>  
+                <div class="form-group">              
+                    <label>Picture 2</label>
+                    <h4 id="id_picture2" class="userId"></h4>
                 </div>  
             </div>
         </div>
@@ -125,8 +136,9 @@
             {"data": "tel_number"},
             {"data": "tel_number"},
             {"data": "simcard"},
-            {"data": "present"}
-       
+            {"data": "present"},
+            {"data": "id_picture"},
+            {"data": "id_picture2"}
           ]
         } 
       );
@@ -205,6 +217,7 @@
      $(document).ready(function() {
     var table = $('#client_table').DataTable();
     $('#client_table').on('dblclick', 'tr', function () {
+      
         var data = table.row(this).data();
         $("#detailModal").modal("show");
         $('#detailInfo').html('Details for ' + data['full_name']);
@@ -213,6 +226,8 @@
         $('#number').html(data['tel_number']);
         $('#simtype').html(data['sim']);
         $('#gift').html(data['present']);
+        $('#id_picture').html(data['id_picture']);
+        $('#id_picture2').html(data['id_picture2']);
           } );
           } );    
          

@@ -12,5 +12,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('orders/', views.orders, name='orders'),
     path('clients/', views.clients, name='clients'),
+    path('<int:id>/', views.order_detail, name="order_detail"),
     
 ]

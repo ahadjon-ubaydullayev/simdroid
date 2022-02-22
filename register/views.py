@@ -205,8 +205,15 @@ def register_view(message):
                 bot.send_message(message.from_user.id,
                               "Ваши заказы:\n", reply_markup=markup)
         else:
-            bot.send_message(message.from_user.id,
-                          "Sizda hozircha buyurtmalar mavjud emas.\n", reply_markup=markup)
+            if lan == 'uz':
+                bot.send_message(message.from_user.id,
+                              "Sizda hozircha buyurtmalar mavjud emas.\n", reply_markup=markup)
+            if lan == 'en':
+                bot.send_message(message.from_user.id,
+                              "Yo do not have any orders\n", reply_markup=markup)
+            if lan == 'ru':
+                bot.send_message(message.from_user.id,
+                              "У вас еще нет заказов.\n", reply_markup=markup)
 
     else:
         order = SimOrder.objects.filter(owner=client, active_sim=True).first()

@@ -9,7 +9,7 @@ class ClientAdmin(admin.ModelAdmin):
 
 @admin.register(SimOrder)
 class SimOrderAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'sim_type', 'gift', 'address', 'tel_number']
+    list_display = ['full_name', 'sim_type', 'gift', 'address', 'tel_number', 'id_picture', 'id_picture2']
     
 
 @admin.register(SimCardOption)
