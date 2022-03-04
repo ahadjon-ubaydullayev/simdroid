@@ -20,8 +20,8 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('register.urls')),
-    path('manage/', include('management.urls')),
+    path('register/', include('register.urls')),
+    path('', include('management.urls')),
 ] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header  =  "Simdroid customer management"  
