@@ -144,25 +144,28 @@ def register_view(message):
                          "Информация📕")
     
     elif message.text == 'Bekor qilish 🚫':
-        order = SimOrder.objects.filter(owner=client, active_sim=True).first()
+        order = SimOrder.objects.filter(owner=client, active_sim=True).last()
+        print(order)
         order.delete()
         bot.send_message(message.from_user.id,
                          "Bekor qilindi\n", reply_markup=main_markup_uzbek)
     
     elif message.text == 'Cancel 🚫':
-        order = SimOrder.objects.filter(owner=client, active_sim=True).first()
+        order = SimOrder.objects.filter(owner=client, active_sim=True).last()
+        print(order)
         order.delete()
         bot.send_message(message.from_user.id,
                          "Cancelled\n", reply_markup=main_markup_english)
 
     elif message.text == 'Отмена 🚫':
-        order = SimOrder.objects.filter(owner=client, active_sim=True).first()
+        order = SimOrder.objects.filter(owner=client, active_sim=True).last()
+        print('order:', order.id)
         order.delete()
         bot.send_message(message.from_user.id,
                          "Отменено\n", reply_markup=main_markup_russian)
     
     elif message.text in ['Orqaga ↩️', 'Back ↩️', 'Назад ↩️']:
-        order = SimOrder.objects.filter(owner=client, active_sim=True).first()
+        order = SimOrder.objects.filter(owner=client, active_sim=True).last()
         order.step -= 1
         order.save()
         cancel_func(message)
@@ -210,7 +213,7 @@ def register_view(message):
                               "Sizda hozircha buyurtmalar mavjud emas.\n", reply_markup=markup)
             if lan == 'en':
                 bot.send_message(message.from_user.id,
-                              "Yo do not have any orders\n", reply_markup=markup)
+                              "You do not have any orders\n", reply_markup=markup)
             if lan == 'ru':
                 bot.send_message(message.from_user.id,
                               "У вас еще нет заказов.\n", reply_markup=markup)
@@ -234,37 +237,36 @@ def register_view(message):
         secordary_markup_r.add(btn1_r, btn2_r)
         
         if order.step == 1:
-            if str(message.text).isdigit():
-                if lan == 'uz': 
-                    bot.send_message(message.from_user.id,
-                                 'Iltimos to\'g\'ri ma\'lumot kiriting🙅‍♂️')
-                    bot.send_message(
-                        message.from_user.id, 'Ismingiz va familiyangizni kiriting:', reply_markup=secordary_markup_u)
-                if lan == 'en': 
-                    bot.send_message(message.from_user.id,
-                                 'Please, enter correct information🙅‍♂️')
-                    bot.send_message(
-                        message.from_user.id, 'Enter your last and first name:', reply_markup=secordary_markup_e)
-                if lan == 'ru': 
-                    bot.send_message(message.from_user.id,
-                                 'Пожалуйста, введите правильную информацию🙅‍♂️')
-                    bot.send_message(
-                        message.from_user.id, 'Введите свою фамилию и имя:', reply_markup=secordary_markup_r)
-            else:
-                order.full_name = message.text
-                client.first_name = message.text
-                order.step += 1
-                order.save()
-                client.save()
-                if lan == 'uz':
-                    bot.send_message(
-                        message.from_user.id, 'Telefon raqamingizni 9x xxx xx xx ko\'rinshda kiriting☎️:', reply_markup=secordary_markup_u)
-                if lan == 'en':
-                    bot.send_message(
-                        message.from_user.id, 'Enter your phone number as shown: 9x xxx xx xx☎️:', reply_markup=secordary_markup_e)
-                if lan == 'ru':
-                    bot.send_message(
-                        message.from_user.id, 'Введите свой номер телефона, как показано: 9x xxx xx xx☎️:', reply_markup=secordary_markup_r)
+        
+            # if lan == 'uz': 
+            #     bot.send_message(message.from_user.id,
+            #                  'Iltimos to\'g\'ri ma\'lumot kiriting🙅‍♂️')
+            #     bot.send_message(
+            #         message.from_user.id, 'Ismingiz va familiyangizni kiriting:', reply_markup=secordary_markup_u)
+            # if lan == 'en': 
+            #     bot.send_message(message.from_user.id,
+            #                  'Please, enter correct information🙅‍♂️')
+            #     bot.send_message(
+            #         message.from_user.id, 'Enter your last and first name:', reply_markup=secordary_markup_e)
+            # if lan == 'ru': 
+            #     bot.send_message(message.from_user.id,
+            #                  'Пожалуйста, введите правильную информацию🙅‍♂️')
+            #     bot.send_message(
+            #         message.from_user.id, 'Введите свою фамилию и имя:', reply_markup=secordary_markup_r)
+            order.full_name = message.text
+            client.first_name = message.text
+            order.step += 1
+            order.save()
+            client.save()
+            if lan == 'uz':
+                bot.send_message(
+                    message.from_user.id, 'Telefon raqamingizni 9x xxx xx xx ko\'rinshda kiriting☎️:', reply_markup=secordary_markup_u)
+            if lan == 'en':
+                bot.send_message(
+                    message.from_user.id, 'Enter your phone number as shown: 9x xxx xx xx☎️:', reply_markup=secordary_markup_e)
+            if lan == 'ru':
+                bot.send_message(
+                    message.from_user.id, 'Введите свой номер телефона, как показано: 9x xxx xx xx☎️:', reply_markup=secordary_markup_r)
 
 
 

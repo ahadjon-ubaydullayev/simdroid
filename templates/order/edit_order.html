@@ -15,7 +15,7 @@
                   <i class="fas fa-window-close"></i></a>
               </div>
             </div>
-            <form id="add_client" class="container pg-5" method="post">
+            <form id="add_client" class="container pg-5" method="post" enctype="multipart/form-data">
               <div class="card-body">
 
                 {% csrf_token %}
@@ -41,9 +41,9 @@
                 <div class="form-group">
                   <label>Simcard Type</label>
                       <select id='sim_type' name="sim_type" class="custom-select" required>
-                        <option selected value="{{ order.sim_type.id }}">{{ order.sim_type.sim_type }}</option>
+                        <option selected value="{{ order.sim_type.id }}">{{ order.sim_type.sim_option }}</option>
                          {% for s in sims %}
-                          <option value="{{ s.id }}">{{ s.sim_type }}</option>
+                          <option value="{{ s.id }}">{{ s.sim_option }}</option>
                          {% endfor %}
                         </select>     
                 </div>
@@ -59,6 +59,15 @@
                 <div class="form-group">
                   <label>Address</label>
                   <input type="text" name="address" value="{{ order.address }}" class="form-control" placeholder="Address">
+                </div>
+                <div class="form-group">
+                  <label>Pic1</label>
+
+                  <img name="front_image" src="{{ order.id_picture.url }}" alt="pic1">
+                </div>
+                 <div class="form-group">
+                  <label>Pic1</label>
+                  <img  name="back_image" src="{{ order.id_picture2.url }}" alt="pic2">
                 </div>
                 <button type="submit" class="btn btn-info float-right">Submit</button>
               </div>

@@ -4,7 +4,7 @@ from register.models import *
 
 class SimOrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    simcard = serializers.CharField(source='sim_type')
+    # simcard = serializers.CharField(source='sim_type')
     present = serializers.CharField(source='gift')
     # photo_url = serializers.SerializerMethodField()
     
@@ -16,7 +16,7 @@ class SimOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SimOrder
-        fields = ('id', 'full_name', 'address', 'tel_number', 'simcard', 'present', 'id_picture', 'id_picture2')
+        fields = ('id', 'full_name', 'address', 'tel_number', 'sim_type', 'present', 'id_picture', 'id_picture2')
 
 
 

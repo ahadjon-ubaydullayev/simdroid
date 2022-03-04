@@ -22,6 +22,7 @@
                 <div class="form-group">              
                         <label >Owner</label>
                         <select id='owner' name="owner" class="custom-select" required>
+                           <option value="Owner"></option>
                          {% for c in clients %}
                           <option value="{{ c.id }}">{{ c.first_name }}</option>
                          {% endfor %}
@@ -38,14 +39,16 @@
                 <div class="form-group">            
                         <label  placeholder="AA 7777777">Simcard type</label>
                         <select id='sim_type' name="sim_type" class="custom-select" required>
+                          <option value="Sim Type"></option>
                          {% for s in sims %}
-                          <option value="{{ s.id }}">{{ s.sim_type }}</option>
+                          <option value="{{ s.id }}">{{ s.sim_option }}</option>
                          {% endfor %}
                         </select>                   
                 </div>
                 <div class="form-group">
                         <label  placeholder="AA 7777777">Gift</label>
-                        <select id='gift' name="gift" class="custom-select" required>
+                        <select id='gift' name="gift" class="custom-select" value="Gift" required>
+                           <option></option>
                           {% for p in presents %}
                           <option value="{{ p.id }}">{{ p.name }}</option>
                          {% endfor %}
@@ -53,7 +56,7 @@
                 </div>
                 <div class="form-group">
                   <label>Address</label>
-                  <input type="text" name="address" class="form-control" placeholder="Name" required>
+                  <input type="text" name="address" class="form-control" placeholder="Address" required>
                 </div>
                 <button type="submit" class="btn btn-info float-right">Submit</button>
               </div>

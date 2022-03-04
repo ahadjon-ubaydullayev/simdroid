@@ -28,6 +28,7 @@ def orders(request):
             clients = Client.objects.all()
             sims = SimCardOption.objects.all()
             presents = Gift.objects.all()
+            order = service.get_order(request.GET['id'])
             context = {"order": service.get_order(request.GET['id']),
                         'clients':clients,
                         "sims":sims,
