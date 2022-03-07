@@ -151,7 +151,7 @@ def register_view(message):
                          "Bekor qilindi\n", reply_markup=main_markup_uzbek)
     
     elif message.text == 'Cancel 🚫':
-        order = SimOrder.objects.filter(owner=client, active_sim=True).last()
+        order = SimOrder.objects.filter(owner=client, active_sim=True, step=).last()
         print(order)
         order.delete()
         bot.send_message(message.from_user.id,
@@ -376,6 +376,7 @@ def register_view(message):
         elif order.step == 7:
             order.address = message.text
             order.step += 1
+            order.active_sim = False
             order.save()
             if lan == 'uz':
                 bot.send_message(message.from_user.id,
