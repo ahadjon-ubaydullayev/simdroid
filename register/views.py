@@ -151,7 +151,7 @@ def register_view(message):
                          "Bekor qilindi\n", reply_markup=main_markup_uzbek)
     
     elif message.text == 'Cancel 🚫':
-        order = SimOrder.objects.filter(owner=client, active_sim=True, step=).last()
+        order = SimOrder.objects.filter(owner=client, active_sim=True).last()
         print(order)
         order.delete()
         bot.send_message(message.from_user.id,
