@@ -15,7 +15,7 @@
                   <i class="fas fa-window-close"></i></a>
               </div>
             </div>
-            <form id="add_client" class="container pg-5" method="post">
+            <form id="add_client" class="container pg-5" method="post" enctype="multipart/form-data">
               <div class="card-body">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="add">
@@ -93,7 +93,9 @@
               delay: 3000,
               fade: true,
               class: 'bg-success'
-            })
+            });
+            window.location.href='{% url 'orders' %}'
+
           } else {
             $(document).Toasts('create',{
               title: 'Error',

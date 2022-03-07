@@ -14,14 +14,13 @@
           <input type="text" class="form-control" id="custom_searchbox">
         </div>
     </div>
-    <div class="col-sm-12">
-      <table id="client_table" class="table table-bordered table-hover dataTable dtr-inline" role="grid" style="width: 100%;">
+    <div class="col-xl-12">
+      <table id="client_table" class="table table-bordered table-hover dataTable dtr-inline" role="grid">
         <thead>
           <tr role="row">
             <th>ID</th>
             <th>FULL NAME</th>
             <th>ADDRESS</th>
-            <th>TEL NUMBER</th>
             <th>TEL NUMBER</th>
             <th>SIM TYPE</th>
             <th>GIFT</th>
@@ -114,27 +113,16 @@
           colReorder: true,
           fixedHeader: true,
           keys: true,
-          responsive: {
-            details: {
-              display: $.fn.dataTable.Responsive.display.modal({
-                header: function (row) {
-                  var data = row.data();
-                  return 'Details for ' + data.full_name;
-                }
-              }),
-              renderer: $.fn.dataTable.Responsive.renderer.tableAll()
-            }
-          },
           scrollY: "70vh",
           select: true,
-          ajax: "/manage/api/order/?format=datatables",
+          ajax: "/api/order/?format=datatables",
+         
           columns: [
             {"data": "id"},
             {"data": "full_name"},
             {"data": "address"},
             {"data": "tel_number"},
-            {"data": "tel_number"},
-            {"data": "sim_type"},
+            {"data": "simcard"},
             {"data": "present"},
             {"data": "id_picture"},
             {"data": "id_picture2"}
@@ -142,7 +130,8 @@
           ]
         } 
       );
-      table.columns([3]).visible(false);
+      table.columns([2]).visible(true);
+      table.columns([6,7]).visible(false);
       table.buttons().container().appendTo($('#buttonrow'));
       $("#custom_searchbox").keyup(function () {
         table.search(this.value).draw();
@@ -224,7 +213,7 @@
         $('#fullName').html(data['full_name']);
         $('#address').html(data['address']);
         $('#number').html(data['tel_number']);
-        $('#simtype').html(data['sim']);
+        $('#simtype').html(data['simcard']);
         $('#gift').html(data['present']);
         $('#id_picture').attr('src', data['id_picture']);
         $('#id_picture2').attr('src', data['id_picture2']);

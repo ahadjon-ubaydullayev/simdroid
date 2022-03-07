@@ -1,4 +1,5 @@
 from register.models import *
+from django.shortcuts import redirect
 
 def add_edit_order(form):
     result = {}
@@ -15,6 +16,7 @@ def add_edit_order(form):
             order.address = form['address']
             order.owner = client
             order.save()
+            
             result['success'] = True
         except Exception as e:
             result['success'] = False
@@ -33,6 +35,7 @@ def add_edit_order(form):
                 address=form['address'],
             )
             order.save()
+            
             result['success'] = True
         except Exception as e:
             result['success'] = False

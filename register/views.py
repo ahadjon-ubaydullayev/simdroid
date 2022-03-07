@@ -15,7 +15,7 @@ bot = TeleBot("5051960822:AAFyFKJFrybdVmRsrG3E1k3rCz3bVXFEYPo")
 def index(request):
     if request.method == 'GET':
         return HttpResponse("Bot Url Page")
-    if request.method == 'POST':
+    elif request.method == 'POST':
         bot.process_new_updates([
             telebot.types.Update.de_json(
                 request.body.decode("utf-8")

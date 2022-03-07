@@ -15,7 +15,7 @@
                   <i class="fas fa-window-close"></i></a>
               </div>
             </div>
-            <form id="add_client" class="container pg-5" method="post" enctype="multipart/form-data">
+            <form enctype="multipart/form-data" id="add_client" class="container pg-5" method="post" enctype="multipart/form-data">
               <div class="card-body">
 
                 {% csrf_token %}
@@ -62,14 +62,14 @@
                 </div>
                 <div class="form-group">
                   <label>Pic1</label>
-
                   <img name="front_image" src="{{ order.id_picture.url }}" alt="pic1">
+                  <input type="file" name="my_pic1" accept="image/*" value="imagesssss">
                 </div>
                  <div class="form-group">
-                  <label>Pic1</label>
+                  <label>Pic2</label>
                   <img  name="back_image" src="{{ order.id_picture2.url }}" alt="pic2">
                 </div>
-                <button type="submit" class="btn btn-info float-right">Submit</button>
+                <button type="submit" class="btn btn-info float-right waves-effect">Submit</button>
               </div>
             </form>
           </div>
