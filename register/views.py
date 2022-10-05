@@ -8,8 +8,7 @@ from .models import SimCardOption, Gift, Client, SimOrder
 from django.core.files.base import ContentFile
 
 
-bot = TeleBot("5051960822:AAFyFKJFrybdVmRsrG3E1k3rCz3bVXFEYPo")
-
+bot = telebot.TeleBot("5051960822:AAFyFKJFrybdVmRsrG3E1k3rCz3bVXFEYPo")
 
 @csrf_exempt
 def index(request):
@@ -30,13 +29,15 @@ def greeting(message):
     if len(active_users) == 0:
         bot.send_message(message.from_user.id, 'Botga Xush kelibsiz\n')
         client = Client.objects.filter(user_id=message.from_user.id)
-        if len(client) == 0:
-            client = Client.objects.create(
-                user_id=message.from_user.id,
-                username=message.from_user.username,
-                first_name=message.from_user.first_name,
-                )
-            client.save()
+
+        if len(client) == 0: # creating user with active_sim has been modified
+            if client.active_sim == False:
+                client = Client.objects.create(
+                    user_id=message.from_user.id,
+                    username=message.from_user.username,
+                    first_name=message.from_user.first_name,
+                    )
+                client.save()
         else:
             client = Client.objects.get(user_id=message.chat.id)
             client.step = 0

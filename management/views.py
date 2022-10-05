@@ -5,23 +5,11 @@ from .serializers import SimOrderSerializer
 from django.http import JsonResponse
 from .import service
 from django.core.files.storage import FileSystemStorage
-
+ 
 #add redirect after success
 def orders(request):
     if request.is_ajax and request.method == 'POST':
-        request_file = request.FILES.get("my_pic1")
-        # request_file = request.FILES['my_pic1'] if 'my_pic1' in request.FILES else None
-        print("my element: ", request_file)
-        if request_file:
-            print("my element: ", request_file)
-            fs = FileSystemStorage()
-            file = fs.save(request_file.name, request_file)
-        # if request.FILES['my_pic1']:
-        #     print("my element: ", request.FILES['my_pic1'])
-            # upload = request.FILES['my_pic1']
-            # fss = FileSystemStorage()
-            # file = fss.save(upload.name, upload)
-            # file_url = fss.url(file)
+        
         if request.POST['action'] == 'add':
             response = service.add_edit_order(request.POST)
             return JsonResponse(response, status=200, safe=False)

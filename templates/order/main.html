@@ -11,13 +11,13 @@
 
       </div>
       <div style="float: right">
-          <input type="text" class="form-control" id="custom_searchbox">
+          <input type="text" class="form-control" id="my_searchbox">
         </div>
     </div>
     <div class="col-xl-12">
       <table id="client_table" class="table table-bordered table-hover dataTable dtr-inline" role="grid">
         <thead>
-          <tr role="row">
+          <tr>
             <th>ID</th>
             <th>FULL NAME</th>
             <th>ADDRESS</th>
@@ -30,11 +30,6 @@
         </thead>
       </table>
     </div>
-  </div>
-
-{#  Add MOdal#}
-  <div id="addModal" class="modal fade">
-    
   </div>
 
 {#  order detail Modal#}
@@ -133,9 +128,16 @@
       table.columns([2]).visible(true);
       table.columns([6,7]).visible(false);
       table.buttons().container().appendTo($('#buttonrow'));
-      $("#custom_searchbox").keyup(function () {
+      
+      $("#my_searchbox").keyup(function () {
         table.search(this.value).draw();
       });
+
+      // $('.dataTables_filter').dataTable( {
+      //   "aoColumnDefs": [
+      // { "bSearchable": false, "aTargets": [ 4, 5 ] }
+    // ] } );
+
 
       table.on('select', function (e, dt, type, indexes) {
         var data = table.rows(indexes).data();
@@ -223,7 +225,9 @@
   </script>
   <style>
   .dataTables_filter {
-     display: none;
+     display: inline-block;
+   
+
 }
 </style>
 {% endblock %}

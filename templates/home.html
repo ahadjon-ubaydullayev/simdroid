@@ -17,8 +17,6 @@
       </li>
     </ul>
 
-   
-
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->
@@ -38,7 +36,10 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
+    <br>
+    
     <a href="{% url 'orders' %}" class="brand-link">
+  
       <span class="brand-text font-weight-light align-content-center">SIMDROID</span>
     </a>
 
@@ -49,6 +50,7 @@
       <a href="{% url 'clients' %}" class="d-block">Clients</a>
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
+            
         </div>
         <div class="info">
           
@@ -83,24 +85,17 @@
   </aside>
   <!-- /.control-sidebar -->
 
-{#  <!-- Main Footer -->#}
-{#  <footer class="main-footer">#}
-{#    <!-- To the right -->#}
-{#    <div class="float-right d-none d-sm-inline">#}
-{#      Anything you want#}
-{#    </div>#}
-{#    <!-- Default to the left -->#}
-{#    <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.#}
-{#  </footer>#}
 </div>
-<!-- ./wrapper -->
-  <script>
-    function submitlang() {
-    $('#setlangform').submit();
-    }
-  </script>
+<script>
+  
+  $(document).ready( function() {
+  $('#client_table_filter').dataTable( {
+    "aoColumnDefs": [
+      { "bSearchable": false, "aTargets": [ 0 ] }
+    ] } );
+} );
 
-
+</script>
 {% endblock %}
 
 
